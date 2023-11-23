@@ -5,14 +5,12 @@ $prodi = isset($_GET['prodi']) ? $_GET['prodi'] : '';
 $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
 
 if (!empty($prodi) || !empty($keyword)) {
-    // Gunakan prepared statement untuk mencegah SQL injection
     $sql = "SELECT * FROM mahasiswa WHERE LOWER(program_studi) LIKE LOWER(?)";
     if (!empty($prodi)) {
         $sql .= " AND LOWER(program_studi) = LOWER(?)";
     }
     $stmt = $conn->prepare($sql);
 
-    // Set parameter dan eksekusi pernyataan
     $param_keyword = '%' . strtolower($keyword) . '%';
     
     if (!empty($prodi)) {
@@ -24,7 +22,6 @@ if (!empty($prodi) || !empty($keyword)) {
 
     $stmt->execute();
 
-    // Dapatkan hasil query
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
@@ -35,7 +32,6 @@ if (!empty($prodi) || !empty($keyword)) {
         echo "<tr><td colspan='3'>Program studi tidak ditemukan.</td></tr>";
     }
 
-    // Tutup statement
     $stmt->close();
 } else {
     echo "<tr><td colspan='3'>Masukkan kata kunci atau pilih program studi untuk mencari data.</td></tr>";
